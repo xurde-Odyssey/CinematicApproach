@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Dose - X U R D E</title>
+
+    <!--
+    - favicon
+  -->
+    <link rel="shortcut icon" href="./assets/images/logo.ico" type="image/x-icon">
+
+    <!--
+    - custom css link
+  -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+
+    <!--
+    - google font link
+  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --paper-bg: #fdfaf3;
+            --paper-border: #e8e2d4;
+            --text-main-font: 'Inter', sans-serif;
+            --text-title-font: 'Plus Jakarta Sans', sans-serif;
+            --text-muted: #6b7280;
+        }
+
+        body {
+            font-family: var(--text-main-font);
+        }
+
+        .daily-dose-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .dose-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .dose-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .paper-card {
+            background: var(--paper-bg);
+            border: 1px solid var(--paper-border);
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .paper-card:last-child {
+            grid-column: span 2;
+            min-height: 250px;
+        }
+
+        .paper-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .paper-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-primary);
+            opacity: 0.3;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .card-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-family: var(--text-title-font);
+            font-weight: 800;
+        }
+
+        .content-body {
+            line-height: 1.6;
+            color: #2c2c2c;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #poem-content {
+            white-space: pre-line;
+            font-size: 1rem;
+            color: #4a4a4a;
+        }
+
+        #summary-title,
+        #quote-text {
+            font-family: var(--text-title-font);
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+
+        #summary-title {
+            font-size: 1.5rem;
+        }
+
+        #quote-text {
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--accent-primary);
+        }
+
+        #summary-text,
+        #quote-author {
+            font-size: 1rem;
+        }
+
+        #quote-author {
+            margin-top: auto;
+            text-align: right;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .refresh-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn-refresh {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-family: var(--text-title-font);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+        }
+
+        .btn-refresh:hover {
+            background: var(--accent-primary);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-2);
+        }
+
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(253, 250, 243, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 850px) {
+            .dose-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .paper-card {
+                min-height: auto;
+            }
+
+            .paper-card:last-child {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="light-theme">
+
+    <main>
+
+        <header class="header">
+            <div class="header-container">
+                <a href="index.html" class="logo">
+                    <img src="./assets/images/logo.ico" alt="XURDE" width="30">
+                    <span>PORTFOLIO<br><small>RESUME</small></span>
+                </a>
+
+                <nav class="navbar">
+                    <ul class="navbar-list">
+                        <li class="navbar-item">
+                            <a href="index.html" class="navbar-link" data-nav-link>Home</a>
+                        </li>
+                        <li class="navbar-item">
+                            <a href="resume.html" class="navbar-link" data-nav-link>About Me</a>
+                        </li>
+                        <li class="navbar-item">
+                            <a href="blog.html" class="navbar-link" data-nav-link>Blog</a>
+                        </li>
+                        <li class="navbar-item">
+                            <a href="daily-dose.html" class="navbar-link active" data-nav-link>Daily Dose</a>
+                        </li>
+                        <li class="navbar-item">
+                            <a href="contact.html" class="btn-chat">Let's Chat</a>
+                        </li>
+                    </ul>
+                </nav>
+
+
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            <section class="daily-dose-container">
+                <div class="dose-header">
+                    <h2 class="h2 article-title">Daily Dose</h2>
+                    <p class="section-subtitle">Literary sparks and random wisdom for your day.</p>
+                </div>
+
+                <div class="dose-grid">
+                    <!-- Poem Section -->
+                    <div class="paper-card">
+                        <div class="loading-overlay" id="poem-loader">
+                            <div class="spinner"></div>
+                        </div>
+                        <span class="card-label">Random Poem</span>
+                        <div class="content-body">
+                            <div id="poem-title"
+                                style="font-weight: 800; font-size: 1.3rem; margin-bottom: 8px; font-family: var(--text-title-font);">
+                            </div>
+                            <div id="poem-author"
+                                style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 600;">
+                            </div>
+                            <div id="poem-content"></div>
+                        </div>
+                    </div>
+
+                    <!-- Article Section -->
+                    <div class="paper-card">
+                        <div class="loading-overlay" id="wiki-loader">
+                            <div class="spinner"></div>
+                        </div>
+                        <span class="card-label">Short Essay</span>
+                        <div class="content-body">
+                            <h3 id="summary-title"></h3>
+                            <div id="summary-text"></div>
+                        </div>
+                    </div>
+
+                    <!-- Quote Section -->
+                    <div class="paper-card">
+                        <div class="loading-overlay" id="quote-loader">
+                            <div class="spinner"></div>
+                        </div>
+                        <span class="card-label">Famous Quote</span>
+                        <div class="content-body">
+                            <div id="quote-text"></div>
+                            <div id="quote-author"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="refresh-section">
+                    <button class="btn-refresh" id="refresh-btn">
+                        <ion-icon name="refresh-outline"></ion-icon>
+                        Refresh Content
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <p>© 2026 Xurde Designs. All rights reserved.</p>
+            </div>
+            <div class="footer-right">
+                <p>Designed by <a href="#" class="designer-link">Xurde</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!--
+    - custom js link
+  -->
+    <script src="./assets/js/script.js"></script>
+
+    <!--
+    - ionicon link
+  -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        const poemTitle = document.getElementById('poem-title');
+        const poemAuthor = document.getElementById('poem-author');
+        const poemContent = document.getElementById('poem-content');
+        const summaryTitle = document.getElementById('summary-title');
+        const summaryText = document.getElementById('summary-text');
+        const quoteText = document.getElementById('quote-text');
+        const quoteAuthor = document.getElementById('quote-author');
+
+        const poemLoader = document.getElementById('poem-loader');
+        const wikiLoader = document.getElementById('wiki-loader');
+        const quoteLoader = document.getElementById('quote-loader');
+        const refreshBtn = document.getElementById('refresh-btn');
+
+        async function fetchPoem() {
+            poemLoader.classList.add('active');
+            try {
+                const response = await fetch('https://poetrydb.org/random/1');
+                const data = await response.json();
+                const poem = data[0];
+
+                poemTitle.textContent = poem.title;
+                poemAuthor.textContent = `by ${poem.author}`;
+                // Join lines but limit to a reasonable length for the card
+                const lines = poem.lines.slice(0, 15);
+                if (poem.lines.length > 15) lines.push('...');
+                poemContent.textContent = lines.join('\n');
+            } catch (error) {
+                console.error('Error fetching poem:', error);
+                poemContent.textContent = "Could not load poem at this time.";
+            } finally {
+                poemLoader.classList.remove('active');
+            }
+        }
+
+        const essays = [
+            {
+                title: "The Silent Architecture of Ink",
+                topic: "Art",
+                content: "Art is often seen as a loud declaration, yet its most profound strength lies in silence. The way ink interacts with paper, the intentionality of a blank space—Ma (間) in Japanese culture—reminds us that what is not there is just as important as what is. In the digital age, we must rediscover the beauty of the unfinished, the sketch that invites the viewer's imagination to complete the story."
+            },
+            {
+                title: "The Ghost in the Machine",
+                topic: "Tech",
+                content: "As we lean further into artificial intelligence, we find ourselves asking what remains uniquely human. Technology was once a tool we held; now it is an environment we inhabit. The 'ghost' isn't a glitch, but the residue of human thought, bias, and creativity encoded into algorithms. Our task is not to fear the machine, but to ensure the human heartbeat remains audible in every line of code."
+            },
+            {
+                title: "Echoes of the Silk Road",
+                topic: "History",
+                content: "History isn't just a series of dates, but a map of movements. The Silk Road wasn't just for silk; it was for ideas, spices, religions, and technologies. When we look at modern connectivity, we are seeing the digital evolution of those ancient dusty paths. We are more linked than we've ever been, yet the fundamental human drive remains the same: the desire to exchange, to explore, and to find home in a foreign place."
+            },
+            {
+                title: "The Fabric of Shared Belonging",
+                topic: "Culture",
+                content: "Culture is the invisible glue that holds a society together. It's found in the specific rhythm of a local market, the way a story is told around a dinner table, and the values passed down through generations. Culture is not static; it's a living, breathing entity that adapts and survives. In a globalized world, preserving the 'local' is not about isolation, but about enriching the global mosaic with unique, irreplaceable colors."
+            },
+            {
+                title: "The Renaissance of Minimalism",
+                topic: "Art & Design",
+                content: "In a world of information overload, minimalism is an act of rebellion. It's the conscious choice to strip away the noise and focus on what truly matters. Whether in architecture, interface design, or personal philosophy, the 'less is more' mantra forces us to confront the value of every element. It's not about emptiness; it's about clarity, purpose, and the breathable space for the soul to rest."
+            }
+        ];
+
+        async function fetchEssay() {
+            wikiLoader.classList.add('active');
+            try {
+                // Simulate a small delay for better UX
+                await new Promise(resolve => setTimeout(resolve, 500));
+                const randomEssay = essays[Math.floor(Math.random() * essays.length)];
+
+                summaryTitle.textContent = randomEssay.title;
+                summaryText.innerHTML = `<span style="font-size: 0.75rem; color: var(--accent-primary); font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 8px;">[ ${randomEssay.topic} ]</span>` + randomEssay.content;
+            } catch (error) {
+                console.error('Error loading essay:', error);
+                summaryText.textContent = "Could not load essay at this time.";
+            } finally {
+                wikiLoader.classList.remove('active');
+            }
+        }
+
+        async function fetchQuote() {
+            quoteLoader.classList.add('active');
+            try {
+                const response = await fetch('https://dummyjson.com/quotes/random');
+                const data = await response.json();
+
+                quoteText.textContent = `"${data.quote}"`;
+                quoteAuthor.textContent = `— ${data.author}`;
+            } catch (error) {
+                console.error('Error fetching quote:', error);
+                quoteText.textContent = "Could not load quote at this time.";
+            } finally {
+                quoteLoader.classList.remove('active');
+            }
+        }
+
+        function refreshContent() {
+            fetchPoem();
+            fetchEssay();
+            fetchQuote();
+        }
+
+        refreshBtn.addEventListener('click', refreshContent);
+
+        // Initial Load
+        window.addEventListener('DOMContentLoaded', () => {
+            refreshContent();
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Mono&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Default Mood: Minimal Monochrome */
+  --bg-color: #050505;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-color: #ffffff;
+  --glow-color: rgba(255, 255, 255, 0.2);
+  --noise-opacity: 0.05;
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'Space+Mono', monospace;
+  --transition-speed: 0.8s;
+}
+
+[data-mood="cyberpunk"] {
+  --bg-color: #0a001a;
+  --text-primary: #00f2ff;
+  --text-secondary: #ff00ff;
+  --accent-color: #00f2ff;
+  --glow-color: rgba(0, 242, 255, 0.3);
+  --noise-opacity: 0.1;
+}
+
+[data-mood="golden-hour"] {
+  --bg-color: #1a0f00;
+  --text-primary: #ffcc33;
+  --text-secondary: #cc6600;
+  --accent-color: #ff9900;
+  --glow-color: rgba(255, 153, 0, 0.2);
+  --noise-opacity: 0.03;
+}
+
+[data-mood="rainy-noir"] {
+  --bg-color: #0f141a;
+  --text-primary: #d1e8ff;
+  --text-secondary: #607d8b;
+  --accent-color: #90a4ae;
+  --glow-color: rgba(144, 164, 174, 0.2);
+  --noise-opacity: 0.08;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+}
+
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: var(--noise-opacity);
+  z-index: 9999;
+}
+
+.spotlight {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: radial-gradient(circle 300px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(255, 255, 255, 0.05),
+      transparent 80%);
+  z-index: 9998;
+}
+
+.cinematic-text {
+  overflow: hidden;
+}
+
+.cinematic-text span {
+  display: inline-block;
+  transform: translateY(100%);
+}
