@@ -1,223 +1,204 @@
-import React, { useState } from 'react';
+import React, { useRef, useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ExternalLink, ArrowUpRight, Play, Github } from 'lucide-react';
+
+import dipakImg from '../assets/images/dipaksup.png';
+import portfolioImg from '../assets/images/bts-final.png';
+import YatharoopImg from '../assets/images/yatharoop.png';
+import xurdeImg from '../assets/images/youtube.png';
+import bloodNationImg from '../assets/images/bloodnation.png';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
     {
         id: 1,
-        title: "Dipak Suppliers | Digital Transformation",
+        title: "Dipak Suppliers",
+        subtitle: "Digital Transformation",
         category: "Web Development",
         year: "2024",
-        video: "https://dipaksuppliers.com.np", // Placeholder for logic
-        image: "https://images.unsplash.com/photo-1481487484168-9b930d5b7d9d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
-        description: "Engineered a robust digital platform that modernized the brand's local market presence. Implemented a responsive architecture that improved user engagement.",
-        tech: ["React", "Transformation", "Responsive"],
-        link: "https://dipaksuppliers.com.np"
+        image: dipakImg,
+        description: "Engineered a robust digital platform that modernized the brand's local market presence. Implemented a responsive architecture that improved user engagement by 40%.",
+        tech: ["HTML", "CSS", "JavaScript"],
+        link: "https://dipaksuppliers.com.np",
+        github: "https://github.com/cyberholic-dips/DipakSup.git"
     },
     {
         id: 2,
-        title: "Portfolio Ecosystem",
-        category: "Interactive Design",
+        title: "Yatharoop",
+        subtitle: "Realstate and Construction",
+        category: "Web Design",
         year: "2024",
-        video: "https://www.bhandaridipesh.com.np/",
-        image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
-        description: "An advanced digital asset featuring custom CSS frameworks, interactive decision systems (Tone.js), and a performance-tuned light theme.",
-        tech: ["Custom CSS", "Tone.js", "Performance"],
-        link: "https://www.bhandaridipesh.com.np/"
+        image: YatharoopImg,
+        description: "Yatharoop Realstate and Construction Pvt.Ltd brings you premium living spaces and commercial landmarks designed for the modern world.",
+        tech: ["HTML", "CSS", "JavaScript"],
+        link: "https://yatharoop.com.np/",
+        github: "https://github.com/cyberholic-dips/Yatharoop.com.np.git"
     },
     {
         id: 3,
-        title: "Xurde Odyssey",
-        category: "Cinematography",
-        year: "Ongoing",
-        video: "https://www.youtube.com/@xurde-Odyssey",
-        image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
-        description: "Documenting raw journeys and natural beauty through a professional lens in the Himalayas. Exploring the connection between silence and solitude.",
-        tech: ["Vlogging", "Storytelling", "Himalayas"],
-        link: "https://www.youtube.com/@xurde-Odyssey"
+        title: "Portfolio Ecosystem",
+        subtitle: "Interactive Experience",
+        category: "Creative Dev",
+        year: "2024",
+        image: portfolioImg,
+        description: "An advanced digital asset featuring custom CSS frameworks, interactive decision systems, and a performance-tuned light/dark theme system.",
+        tech: ["HTML", "CSS", "JavaScript", "GSAP", "React", "WebGL"],
+        link: "https://www.bhandaridipesh.com.np/",
+        github: "https://github.com/cyberholic-dips/dipesh-bhandari-portfolio.git"
     },
     {
         id: 4,
-        title: "Blood Nation",
-        category: "Social Impact",
-        year: "Academic",
-        video: "#",
-        image: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
-        description: "Architected a donor-linkage system to streamline emergency blood mobilization. Focused on UX accessibility and real-time data integrity.",
-        tech: ["Healthcare", "UX", "Data Integrity"],
-        link: "#"
+        title: "Xurde Odyssey",
+        subtitle: "Visual Storytelling",
+        category: "Cinematography",
+        year: "Ongoing",
+        image: xurdeImg,
+        description: "Documenting raw journeys and natural beauty through a professional lens in the Himalayas. Exploring the connection between silence and solitude.",
+        tech: ["Capcut", "Sound Design"],
+        link: "https://www.youtube.com/@xurde-Odyssey",
+        github: null
     },
+    {
+        id: 5,
+        title: "Blood Nation",
+        subtitle: "Emergency Response",
+        category: "Social Impact",
+        year: "2023",
+        image: bloodNationImg,
+        description: "To develop an online platform for the donors to make their donations to be utilized efficiently.",
+        tech: ["HTML", "CSS", "JavaScript", "PHP", "MySQL"],
+        link: "https://drive.google.com/file/d/1GtnOws41oYBTSd4flxEeXJAa7SDDwSHt/view?usp=sharing",
+        github: null
+    }
 ];
 
-const ProjectCard = ({ project }) => {
-    const [isHovered, setIsHovered] = useState(false);
-
+const ProjectCard = ({ project, index }) => {
     return (
-        <div
-            style={{
-                position: 'relative',
-                width: '100%',
-                height: '500px',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                cursor: 'pointer',
-                transition: 'transform 0.6s cubic-bezier(0.2, 1, 0.3, 1)',
-                transform: isHovered ? 'scale(1.02)' : 'scale(1)',
-            }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
-            {/* Background Media */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundImage: `url(${project.preview})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    transition: 'transform 0.8s ease',
-                    transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-                }}
-            />
-
-            {/* Dark Overlay */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%)',
-                    opacity: isHovered ? 0.9 : 0.6,
-                    transition: 'opacity 0.4s ease',
-                }}
-            />
-
-            {/* Content */}
-            <div
-                style={{
-                    position: 'absolute',
-                    bottom: '0',
-                    left: '0',
-                    width: '100%',
-                    padding: '40px',
-                    transform: isHovered ? 'translateY(-10px)' : 'translateY(0)',
-                    transition: 'transform 0.4s ease',
-                }}
-            >
+        <div className="project-card group relative w-full aspect-[4/3] overflow-hidden rounded-sm bg-neutral-900 border border-white/10">
+            {/* Image container with scale effect */}
+            <div className="absolute inset-0 overflow-hidden">
                 <div
-                    style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.8rem',
-                        color: 'var(--accent-color)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.2em',
-                        marginBottom: '10px',
-                        opacity: isHovered ? 1 : 0.7,
-                        transition: 'opacity 0.4s ease',
-                    }}
-                >
-                    {project.genre}
-                </div>
-                <h3
-                    style={{
-                        fontSize: '2.5rem',
-                        marginBottom: '10px',
-                        fontFamily: 'var(--font-serif)',
-                    }}
-                >
-                    {project.title}
-                </h3>
-                <p
-                    style={{
-                        fontSize: '1rem',
-                        color: 'var(--text-secondary)',
-                        maxWidth: '100%',
-                        opacity: isHovered ? 1 : 0,
-                        transform: isHovered ? 'translateY(0)' : 'translateY(20px)',
-                        transition: 'all 0.4s ease',
-                    }}
-                >
-                    {project.description}
-                </p>
+                    className="w-full h-full bg-cover bg-center transition-transform duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-110"
+                    style={{ backgroundImage: `url(${project.image})` }}
+                />
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-500" />
             </div>
 
-            {/* Play Button Icon on Hover */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '50%',
-                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                    backdropFilter: 'blur(10px)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    opacity: isHovered ? 1 : 0,
-                    transition: 'all 0.4s ease',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                }}
-            >
-                <div style={{ width: 0, height: 0, borderTop: '15px solid transparent', borderBottom: '15px solid transparent', borderLeft: '25px solid #fff', marginLeft: '8px' }} />
+            {/* Hover Reveal Overlay */}
+            <div className="absolute inset-0 p-6 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 bg-black/40 backdrop-blur-[2px]">
+                <div className="flex justify-between items-start translate-y-[-20px] group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                    <span className="font-mono text-xs text-[#00F2FF] tracking-widest uppercase border border-[#00F2FF]/30 px-2 py-1 rounded">
+                        {project.category}
+                    </span>
+                    <div className="flex gap-3">
+                        {project.github && (
+                            <a href={project.github} className="p-2 bg-white/10 hover:bg-white text-white hover:text-black rounded-full transition-all">
+                                <Github size={18} />
+                            </a>
+                        )}
+                        <a href={project.link} className="p-2 bg-[#00F2FF] text-black rounded-full hover:scale-110 transition-transform">
+                            <ArrowUpRight size={18} />
+                        </a>
+                    </div>
+                </div>
+
+                <div className="translate-y-[20px] group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                    <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-6 font-light">
+                        {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        {project.tech.map((t, i) => (
+                            <span key={i} className="text-xs font-mono text-gray-400">#{t}</span>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Default Static Content (Visible when not hovered) */}
+            <div className="absolute bottom-0 left-0 w-full p-8 group-hover:opacity-0 transition-opacity duration-500 delay-0 z-10 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
+                <div className="flex justify-between items-end border-b border-white/20 pb-4 mb-4">
+                    <div>
+                        <span className="block font-mono text-xs text-gray-400 mb-1">0{index + 1} — {project.year}</span>
+                        <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tighter">{project.title}</h3>
+                    </div>
+                    <ArrowUpRight className="text-gray-500 mb-2" size={32} />
+                </div>
+                <div className="flex justify-between items-center">
+                    <p className="text-gray-400 font-serif italic text-sm md:text-base">{project.subtitle}</p>
+                    <span className="text-xs font-mono text-gray-500 uppercase tracking-widest">{project.category}</span>
+                </div>
             </div>
         </div>
     );
 };
 
 const FeaturedProjects = () => {
+    const sectionRef = useRef(null);
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            gsap.from('.section-header', {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 80%",
+                }
+            });
+
+            gsap.from('.project-card', {
+                y: 100,
+                opacity: 0,
+                duration: 1.2,
+                stagger: 0.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: '.projects-grid',
+                    start: "top 75%",
+                }
+            });
+        }, sectionRef);
+
+        return () => ctx.revert();
+    }, []);
+
     return (
-        <section
-            style={{
-                padding: '100px 5vw',
-                minHeight: '100vh',
-            }}
-        >
-            <div style={{ marginBottom: '60px' }}>
-                <h2 style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', marginBottom: '10px' }}>
-                    FEATURED PROJECTS
-                </h2>
-                <p style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
-                    /Selected works from the pixel universe
-                </p>
-            </div>
+        <section ref={sectionRef} className="py-32 px-6 md:px-12 min-h-screen bg-[#050505] text-white">
+            <div className="max-w-7xl mx-auto">
+                <div className="section-header mb-20 flex flex-col md:flex-row justify-between items-end border-b border-white/10 pb-8">
+                    <div>
+                        <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600">
+                            SELECTED<br />WORKS
+                        </h2>
+                    </div>
+                    <div className="text-right pb-2">
+                        <p className="font-mono text-gray-500 text-sm mb-2">/ ARCHIVE 2023-2024</p>
+                        <p className="max-w-md text-gray-400 text-lg font-light leading-relaxed">
+                            A curation of digital experiences, visual storytelling, and technical engineering.
+                        </p>
+                    </div>
+                </div>
 
-            <div
-                style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-                    gap: '40px',
-                }}
-            >
-                {projects.map((project) => (
-                    <ProjectCard key={project.id} project={project} />
-                ))}
-            </div>
+                <div className="projects-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {projects.map((project, index) => (
+                        <ProjectCard key={project.id} project={project} index={index} />
+                    ))}
+                </div>
 
-            <div style={{ marginTop: '60px', textAlign: 'center' }}>
-                <button
-                    style={{
-                        backgroundColor: 'transparent',
-                        border: 'none',
-                        color: 'var(--text-secondary)',
-                        fontSize: '0.9rem',
-                        fontFamily: 'var(--font-mono)',
-                        cursor: 'pointer',
-                        padding: '10px 20px',
-                        textDecoration: 'underline',
-                        textUnderlineOffset: '8px',
-                    }}
-                >
-                    View Full Archive →
-                </button>
+                <div className="mt-32 text-center">
+                    <a href="#" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors font-mono uppercase tracking-widest text-sm group">
+                        <span>View Full Archive</span>
+                        <ArrowUpRight size={16} className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                </div>
             </div>
         </section>
     );
 };
 
 export default FeaturedProjects;
+

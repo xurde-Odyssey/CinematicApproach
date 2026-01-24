@@ -7,6 +7,7 @@ import AboutSection from './components/AboutSection';
 import Timeline from './components/Timeline';
 import InteractiveLab from './components/InteractiveLab';
 import FeaturedProjects from './components/FeaturedProjects';
+import Adventures from './components/Adventures';
 import BehindTheShot from './components/BehindTheShot';
 import DigitalAlterEgo from './components/DigitalAlterEgo';
 import FutureVision from './components/FutureVision';
@@ -42,6 +43,17 @@ const MainLayout = ({ children }) => {
 const AppContent = () => {
   const [isLoading, setIsLoading] = useState(true);
 
+  // Add error boundary
+  useEffect(() => {
+    console.log('AppContent mounted');
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+      window.scrollTo(0, 0);
+    }
+  }, [isLoading]);
+
   if (isLoading) {
     return <LoadingExperience onComplete={() => setIsLoading(false)} />;
   }
@@ -52,6 +64,7 @@ const AppContent = () => {
       <AboutSection />
       <Timeline />
       <InteractiveLab />
+      <Adventures />
       <FeaturedProjects />
       <BehindTheShot />
       <DigitalAlterEgo />
@@ -64,6 +77,20 @@ const AppContent = () => {
 };
 
 function App() {
+  // Add error logging
+  useEffect(() => {
+    console.log('App component mounted');
+
+    // Global error handler
+    window.addEventListener('error', (e) => {
+      console.error('Global error:', e.error);
+    });
+
+    window.addEventListener('unhandledrejection', (e) => {
+      console.error('Unhandled promise rejection:', e.reason);
+    });
+  }, []);
+
   return (
     <MoodProvider>
       <AppContent />

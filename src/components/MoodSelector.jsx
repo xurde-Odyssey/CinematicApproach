@@ -5,61 +5,25 @@ const MoodSelector = () => {
     const { currentMood, setCurrentMood } = useMood();
 
     return (
-        <div
-            style={{
-                position: 'fixed',
-                bottom: '40px',
-                right: '40px',
-                zIndex: 1000,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                gap: '15px',
-            }}
-        >
-            <div
-                style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.7rem',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: 'var(--text-secondary)',
-                    marginBottom: '-5px',
-                }}
-            >
-                Choose the World
+        <div className="fixed bottom-10 right-10 z-50 flex flex-col items-end gap-3 pointer-events-auto">
+            <div className="font-mono text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-1">
+                Choose the Theme
             </div>
-            <div
-                style={{
-                    display: 'flex',
-                    gap: '10px',
-                    padding: '10px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    backdropFilter: 'blur(10px)',
-                    borderRadius: '40px',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                }}
-            >
+            <div className="flex gap-2 p-2 bg-[var(--color-text)]/5 backdrop-blur-md rounded-full border border-[var(--color-text)]/10 shadow-lg">
                 {moods.map((mood) => (
                     <button
                         key={mood.id}
                         onClick={() => setCurrentMood(mood.id)}
-                        style={{
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '50%',
-                            border: 'none',
-                            backgroundColor: currentMood === mood.id ? 'var(--accent-color)' : 'transparent',
-                            color: currentMood === mood.id ? 'var(--bg-color)' : 'var(--text-primary)',
-                            cursor: 'pointer',
-                            fontSize: '1.2rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                            transform: currentMood === mood.id ? 'scale(1.1)' : 'scale(1)',
-                        }}
+                        className={`
+                            w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ease-out
+                            hover:scale-110 active:scale-95
+                            ${currentMood === mood.id
+                                ? 'bg-[var(--highlight)] text-[var(--color-bg)] shadow-[0_0_20px_var(--highlight)] scale-110'
+                                : 'text-[var(--text-primary)] hover:bg-[var(--color-text)]/10 hover:text-[var(--highlight)]'
+                            }
+                        `}
                         title={mood.name}
+                        aria-label={`Switch to ${mood.name} mood`}
                     >
                         {mood.icon}
                     </button>

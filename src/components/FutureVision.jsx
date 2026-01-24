@@ -101,10 +101,10 @@ const FutureVision = () => {
         >
             <div style={{ textAlign: 'center', marginBottom: '80px' }}>
                 <h2 style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', marginBottom: '20px' }}>
-                    THE WORLDS I WANT TO BUILD
+                    Bucket List
                 </h2>
                 <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>
-                    Peering into the future of digital interaction, where code and emotion converge.
+                    My dreams, goals, and the adventures I'm chasing.
                 </p>
             </div>
 

@@ -1,63 +1,72 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ArrowRight, Github, Twitter, Linkedin, Mail, Youtube } from 'lucide-react';
+import { ArrowRight, Github, Twitter, Linkedin, Mail, Youtube, MapPin } from 'lucide-react';
+import PhotoImg from '../assets/images/photo.png';
 
 const HeroSection = () => {
     const sectionRef = useRef(null);
-    const spotlightRef = useRef(null);
-    const lineRef = useRef(null);
-    const sublineRef = useRef(null);
-    const ctaRef = useRef(null);
+    const textRef = useRef(null);
+    const imageRef = useRef(null);
+    const shapesRef = useRef(null);
 
     useEffect(() => {
-        const tl = gsap.timeline({ defaults: { ease: 'power4.out', duration: 1.5 } });
+        const ctx = gsap.context(() => {
+            const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-        // Ensure elements exist before animating
-        if (lineRef.current && sublineRef.current && ctaRef.current) {
-            tl.fromTo(
-                lineRef.current,
-                { y: 100, opacity: 0 },
-                { y: 0, opacity: 1, delay: 0.5 }
-            )
-                .fromTo(
-                    sublineRef.current,
-                    { opacity: 0, y: 20 },
-                    { opacity: 1, y: 0 },
-                    '-=1'
-                )
-                .fromTo(
-                    ctaRef.current.children,
-                    { opacity: 0, scale: 0.9 },
-                    { opacity: 1, scale: 1, stagger: 0.2 },
-                    '-=1'
-                );
-        }
+            // 1. Initial State (Hidden)
+            gsap.set('.hero-text-line', { y: 100, opacity: 0, skewY: 5 });
+            gsap.set('.hero-image-container', { scale: 0.8, opacity: 0, filter: 'blur(10px)' });
+            gsap.set('.hero-meta', { opacity: 0, x: -20 });
 
-        const handleMouseMove = (e) => {
-            if (!spotlightRef.current) return;
-            const { clientX, clientY } = e;
-            const x = clientX - sectionRef.current.getBoundingClientRect().left;
-            const y = clientY - sectionRef.current.getBoundingClientRect().top;
+            // 2. Sequence
+            tl.to('.hero-image-container', {
+                scale: 1,
+                opacity: 1,
+                filter: 'blur(0px)',
+                duration: 1.5,
+                ease: 'expo.out'
+            })
+                .to('.hero-text-line', {
+                    y: 0,
+                    opacity: 1,
+                    skewY: 0,
+                    stagger: 0.1,
+                    duration: 1
+                }, '-=1')
+                .to('.hero-meta', {
+                    opacity: 1,
+                    x: 0,
+                    stagger: 0.1,
+                    duration: 0.8
+                }, '-=0.5');
 
-            gsap.to(spotlightRef.current, {
-                x: x,
-                y: y,
-                duration: 1,
-                ease: 'power2.out'
-            });
-        };
+            // 3. Mouse Parallax Effect
+            const handleMouseMove = (e) => {
+                const { clientX, clientY } = e;
+                const x = (clientX / window.innerWidth - 0.5) * 20;
+                const y = (clientY / window.innerHeight - 0.5) * 20;
 
-        const sectionElement = sectionRef.current;
-        if (sectionElement) {
-            sectionElement.addEventListener('mousemove', handleMouseMove);
-        }
+                gsap.to(imageRef.current, {
+                    x: x,
+                    y: y,
+                    duration: 1,
+                    ease: 'power2.out'
+                });
 
-        return () => {
-            if (sectionElement) {
-                sectionElement.removeEventListener('mousemove', handleMouseMove);
-            }
-            tl.kill();
-        };
+                gsap.to(shapesRef.current, {
+                    x: x * -1.5,
+                    y: y * -1.5,
+                    duration: 1.2,
+                    ease: 'power2.out'
+                });
+            };
+
+            window.addEventListener('mousemove', handleMouseMove);
+            return () => window.removeEventListener('mousemove', handleMouseMove);
+
+        }, sectionRef);
+
+        return () => ctx.revert();
     }, []);
 
     const socialLinks = [
@@ -68,105 +77,112 @@ const HeroSection = () => {
     ];
 
     return (
-        <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden py-20">
-            {/* Background Interactive Elements */}
-            <div
-                ref={spotlightRef}
-                className="pointer-events-none absolute top-0 left-0 w-[800px] h-[800px] bg-[var(--highlight)] rounded-full mix-blend-screen filter blur-[100px] opacity-10 z-0 transform -translate-x-1/2 -translate-y-1/2 transition-colors duration-1000"
-            />
+        <section ref={sectionRef} className="relative min-h-screen flex items-center bg-[var(--bg-color)] text-[var(--text-primary)] overflow-hidden transition-colors duration-700">
+            {/* Background Atmosphere */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="absolute top-[-20%] right-[-10%] w-[80vh] h-[80vh] bg-purple-900/10 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[80vh] h-[80vh] bg-blue-900/10 rounded-full blur-[120px]" />
+                <div ref={shapesRef} className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat" />
+            </div>
 
-            <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+            <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 items-center h-screen">
 
-                {/* Left Column: Text Content */}
-                <div className="space-y-8">
-                    <div className="inline-block px-4 py-2 rounded-full border border-[var(--color-text)]/20 backdrop-blur-md">
-                        <span className="text-sm uppercase tracking-[0.2em] text-[var(--color-text)]/80">
-                            <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse"></span>
-                            Available for New Projects
+                {/* Text Content (Left - Spans 7 cols) */}
+                <div ref={textRef} className="lg:col-span-7 flex flex-col justify-center space-y-12">
+
+                    {/* Meta Header */}
+                    <div className="hero-meta flex items-center gap-4 text-xs font-mono text-[var(--text-secondary)] uppercase tracking-widest">
+                        <span className="flex items-center gap-2">
+                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                            System Online
                         </span>
+                        <span>//</span>
+                        <span>27.7172° N, 85.3240° E</span>
                     </div>
 
-                    <h1 ref={lineRef} className="text-5xl md:text-7xl font-bold leading-tight">
-                        Empowering Brands Through <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-text)] to-[var(--highlight)] glitch-text" data-text="Digital Innovation">
-                            Digital Innovation
-                        </span>
-                    </h1>
+                    {/* Main Headline */}
+                    <div className="space-y-2 overflow-hidden">
+                        <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-[var(--text-primary)] mix-blend-difference">
 
-                    <p ref={sublineRef} className="text-xl md:text-2xl text-[var(--color-text)]/70 max-w-xl leading-relaxed">
-                        I'm <strong className="text-[var(--color-text)]">Dipesh Bhandari</strong>. A creator specialized in building modern web applications and cinematic visual content. Crafting the future one pixel at a time.
+                            <div className="hero-text-line text-transparent bg-clip-text bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)]">
+                                Content Creator
+                            </div>
+                            <div className="hero-text-line flex items-center gap-4">
+                                <span className="text-2xl md:text-4xl font-serif italic text-[var(--text-secondary)] font-normal tracking-normal self-end mb-2">
+                                    & Web Developer
+                                </span>
+                            </div>
+                        </h1>
+                    </div>
+
+                    {/* Subline */}
+                    <p className="hero-text-line text-lg text-[var(--text-secondary)] max-w-lg leading-relaxed border-l-2 border-[var(--text-primary)]/20 pl-6">
+                        I'm <strong className="text-[var(--text-primary)]">Dipesh Bhandari</strong>.
+                        Merging cinematic visuals with modern code to build immersive digital universes from the Himalayas.
                     </p>
 
-                    <div ref={ctaRef} className="flex flex-wrap gap-6">
-                        <button className="group relative px-8 py-4 bg-[var(--color-text)] text-[var(--color-bg)] font-bold rounded-full overflow-hidden hover:scale-105 transition-transform duration-300">
+                    {/* Actions */}
+                    <div className="hero-text-line flex flex-wrap gap-6 items-center">
+                        <button className="group relative px-8 py-4 bg-[var(--text-primary)] text-[var(--bg-color)] font-bold rounded-full overflow-hidden hover:scale-105 transition-transform duration-300">
                             <span className="relative z-10 flex items-center gap-2">
-                                Get in Touch <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                Start Project <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </span>
-                            <div className="absolute inset-0 bg-[var(--highlight)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-difference"></div>
+                            <div className="absolute inset-0 bg-[var(--text-secondary)] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
                         </button>
-                        <button className="px-8 py-4 border border-[var(--color-text)]/30 rounded-full font-bold hover:bg-[var(--color-text)]/5 transition-colors duration-300">
-                            View Portfolio
-                        </button>
-                    </div>
 
-                    <div className="flex gap-6 pt-4">
-                        {socialLinks.map((link, index) => (
-                            <a
-                                key={index}
-                                href={link.href}
-                                className="p-3 rounded-full border border-[var(--color-text)]/20 hover:border-[var(--highlight)] hover:text-[var(--highlight)] transition-colors duration-300"
-                                aria-label={link.label}
-                            >
-                                <link.icon className="w-6 h-6" />
-                            </a>
-                        ))}
+                        <div className="flex gap-4">
+                            {socialLinks.map((link, i) => (
+                                <a
+                                    key={i}
+                                    href={link.href}
+                                    className="p-3 border border-[var(--text-primary)]/10 rounded-full hover:bg-[var(--text-primary)]/10 hover:border-[var(--text-primary)]/30 transition-all text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                                    aria-label={link.label}
+                                >
+                                    <link.icon size={20} />
+                                </a>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                {/* Right Column: Visual or 3D Element */}
-                <div className="relative hidden lg:block h-[600px] w-full">
-                    {/* Abstract Floating Cards / Elements */}
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center">
-                        <div className="relative w-80 h-96 border border-[var(--color-text)]/10 rounded-2xl backdrop-blur-sm bg-[var(--color-text)]/5 p-6 transform rotate-6 hover:rotate-0 transition-transform duration-700">
-                            <div className="absolute -top-10 -right-10 w-20 h-20 bg-[var(--highlight)] rounded-full blur-2xl opacity-40"></div>
-                            <div className="h-full flex flex-col justify-between">
-                                <div className="text-4xl">🎥</div>
+                {/* Visual Content (Right - Spans 5 cols) */}
+                <div className="lg:col-span-5 relative h-[60vh] lg:h-full flex items-center justify-center lg:justify-end">
+                    <div className="hero-image-container relative w-full max-w-md aspect-[3/4] group">
+
+                        {/* Frame/Border Elements */}
+                        <div className="absolute -inset-4 border border-[var(--text-primary)]/10 rounded-xl z-0 scale-95 group-hover:scale-100 transition-transform duration-700" />
+                        <div className="absolute -inset-4 border border-[var(--text-primary)]/5 rounded-xl z-0 rotate-2 scale-95 group-hover:rotate-0 transition-transform duration-700 delay-75" />
+
+                        {/* Main Image */}
+                        <div className="relative w-full h-full rounded-lg overflow-hidden bg-[#111] z-10">
+                            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-color)]/80 via-transparent to-transparent z-20" />
+                            <img
+                                ref={imageRef}
+                                src={PhotoImg}
+                                alt="Dipesh Bhandari"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0"
+                            />
+
+                            {/* Floating Badge */}
+                            <div className="absolute bottom-6 left-6 z-30 bg-[var(--text-primary)]/10 backdrop-blur-md border border-[var(--text-primary)]/20 px-4 py-2 rounded-lg flex items-center gap-3">
+                                <MapPin size={16} className="text-[var(--text-primary)]" />
                                 <div>
-                                    <h3 className="text-2xl font-bold mb-2">Vlogger</h3>
-                                    <p className="opacity-60">20+ Vlogs Produced</p>
+
+                                    <p className="text-xs font-bold text-[var(--text-primary)]">Nepal</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-96 border border-[var(--color-text)]/10 rounded-2xl backdrop-blur-md bg-[var(--color-bg)]/80 p-6 shadow-2xl">
-                            <div className="h-full flex flex-col justify-between">
-                                <div className="text-4xl">🏔️</div>
-                                <div>
-                                    <h3 className="text-2xl font-bold mb-2">Passion</h3>
-                                    <p className="opacity-60">Himalayan Adventures</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="absolute bottom-10 -left-10 w-64 p-4 border border-[var(--color-text)]/10 rounded-xl backdrop-blur-md bg-[var(--color-text)]/5 animate-float-delayed">
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-[var(--highlight)]/20 rounded-lg text-[var(--highlight)]">
-                                    <ArrowRight className="w-6 h-6" />
-                                </div>
-                                <div>
-                                    <p className="text-xs opacity-50 uppercase tracking-wider">Based in</p>
-                                    <p className="font-bold">Nepal</p>
-                                </div>
-                            </div>
-                        </div>
+                        {/* Decorative 'Film' Strip or Code Elements could go here */}
                     </div>
                 </div>
 
             </div>
 
-            {/* Scroll indicator */}
-            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce opacity-50">
-                <span className="text-xs uppercase tracking-[0.3em]">Scroll to Explore</span>
+            {/* Scroll Indicator */}
+            <div className="hero-meta absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+                <span className="text-[10px] uppercase tracking-[0.3em] text-[var(--text-secondary)]">Scroll</span>
+                <div className="w-[1px] h-12 bg-gradient-to-b from-[var(--text-primary)] to-transparent" />
             </div>
         </section>
     );
