@@ -10,7 +10,7 @@ import FeaturedProjects from './components/FeaturedProjects';
 import Adventures from './components/Adventures';
 import BehindTheShot from './components/BehindTheShot';
 import DigitalAlterEgo from './components/DigitalAlterEgo';
-import FutureVision from './components/FutureVision';
+import BucketList from './components/BucketList';
 import EasterEgg from './components/EasterEgg';
 import EndCredits from './components/EndCredits';
 import './index.css';
@@ -68,7 +68,7 @@ const AppContent = () => {
       <FeaturedProjects />
       <BehindTheShot />
       <DigitalAlterEgo />
-      <FutureVision />
+      <BucketList />
       <EasterEgg />
       <EndCredits />
       <MoodSelector />

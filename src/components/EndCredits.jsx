@@ -178,10 +178,10 @@ const EndCredits = () => {
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                     className="group relative px-10 py-5 bg-transparent border border-white/20 hover:border-white transition-all duration-700 pointer-events-auto"
                 >
-                    <span className="relative z-10 text-xs md:text-sm uppercase tracking-[0.4em] group-hover:tracking-[0.6em] transition-all duration-700">
+                    <span className="relative z-10 text-xs md:text-sm uppercase tracking-[0.4em] group-hover:tracking-[0.6em] transition-all duration-900">
                         Restart Experience
                     </span>
-                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-700" />
+                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-900" />
                 </button>
                 <div className="text-[10px] uppercase tracking-[0.5em] text-white/30">
                     © 2026. Xurde Designs | CINEMATIC APPROACH

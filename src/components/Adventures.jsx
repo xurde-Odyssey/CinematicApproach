@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MapPin, Mountain, Compass } from 'lucide-react';
 import adventureHighlight from '../assets/adventure_highlight.png';
 
-const AdventureCard = ({ title, location, description, icon: Icon, delay, image }) => (
+const AdventureCard = ({ title, location, description, icon: Icon, delay, image, link }) => (
     <div
         style={{
             animation: `fadeInUp 0.8s ease forwards ${delay}s`,
@@ -38,7 +38,9 @@ const AdventureCard = ({ title, location, description, icon: Icon, delay, image 
             )}
 
             <h3 style={{ fontFamily: 'var(--font-serif)' }} className="text-2xl text-white mb-2">
-                {title}
+                <a href={link || '#'} target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">
+                    {title}
+                </a>
             </h3>
 
             <p className="text-gray-400 text-sm mb-6 flex-grow font-sans leading-relaxed">
@@ -63,7 +65,8 @@ const Adventures = () => {
             description: "The highest altitude lake in the world, an ethereal beauty at 4,919m.",
             icon: Mountain,
             image: null,
-            delay: 0.1
+            delay: 0.1,
+            link: "https://youtu.be/VCi7YtzQnyg"
         },
         {
             title: "Shey Phoksundo Lake",
@@ -71,7 +74,8 @@ const Adventures = () => {
             description: "A turquoise gem hidden in the Dolpo region, untouched and serene.",
             icon: Compass,
             image: null,
-            delay: 0.2
+            delay: 0.2,
+            link: "https://youtu.be/PcWaedaynvE"
         },
         {
             title: "Mardi Himal",
@@ -79,7 +83,8 @@ const Adventures = () => {
             description: "A short but intense trek offering breathtaking views of Machhapuchhre.",
             icon: Mountain,
             image: null,
-            delay: 0.3
+            delay: 0.3,
+            link: "https://youtu.be/WoC192K03z8"
         },
         {
             title: "Annapurna Base Camp",
@@ -87,7 +92,8 @@ const Adventures = () => {
             description: "Walking into the sanctuary of the giants, surrounded by 8,000m peaks.",
             icon: Mountain,
             image: null,
-            delay: 0.4
+            delay: 0.4,
+            link: "https://youtu.be/6gZdW6itYdc"
         },
         {
             title: "Rara Lake",
@@ -95,7 +101,8 @@ const Adventures = () => {
             description: "The queen of lakes in Nepal, a peaceful blue expanse in the wild west.",
             icon: MapPin,
             image: null,
-            delay: 0.5
+            delay: 0.5,
+            link: "https://youtu.be/ryH-3E3kyAY"
         },
         {
             title: "Langtang Village",
@@ -103,7 +110,8 @@ const Adventures = () => {
             description: "A journey of resilience and beauty through the valley of glaciers.",
             icon: Compass,
             image: null,
-            delay: 0.6
+            delay: 0.6,
+            link: "https://youtu.be/_ea2p5z8IGE"
         }
     ];
 

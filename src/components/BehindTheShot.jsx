@@ -229,7 +229,7 @@ const BehindTheShot = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-col md:flex-row h-64 md:h-48 gap-2 w-full">
+                    <div className="flex flex-col md:flex-row h-[600px] md:h-64 lg:h-80 gap-2 w-full">
                         {[
                             { color: '#3B82F6', name: 'Solitude', desc: 'Calm. Distance.', css: 'bg-blue-600' },
                             { color: '#F97316', name: 'Warmth', desc: 'Energy. Impact.', css: 'bg-orange-600' },
@@ -241,18 +241,19 @@ const BehindTheShot = () => {
                                 key={i}
                                 onMouseEnter={() => setActiveColor(c.color)}
                                 onMouseLeave={() => setActiveColor(null)}
+                                onClick={() => setActiveColor(activeColor === c.color ? null : c.color)} // Tap interaction for mobile
                                 className={`
-                                    relative flex-1 group overflow-hidden rounded-xl border border-white/10 transition-all duration-500 ease-out
-                                    ${activeColor === c.color ? 'flex-[2] md:flex-[2] border-white/40' : 'hover:flex-[1.5] opacity-60 hover:opacity-100'}
+                                    relative flex-1 group overflow-hidden rounded-xl border border-white/10 transition-all duration-500 ease-out cursor-pointer
+                                    ${activeColor === c.color ? 'flex-[3] md:flex-[2] border-white/40' : 'hover:flex-[1.5] md:hover:flex-[1.5] opacity-60 hover:opacity-100'}
                                 `}
                             >
                                 <div className={`absolute inset-0 ${c.css} opacity-20 group-hover:opacity-40 transition-opacity`} />
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
 
-                                <div className="absolute bottom-0 left-0 w-full p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                <div className="absolute bottom-0 left-0 w-full p-6 translate-y-2 md:translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                     <div className="h-1 w-8 mb-4 rounded-full" style={{ backgroundColor: c.color }} />
                                     <h4 className="text-xl font-bold text-white mb-1 leading-none">{c.name}</h4>
-                                    <p className="text-xs text-gray-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity delay-100">
+                                    <p className={`text-xs text-gray-400 uppercase tracking-widest transition-opacity delay-100 ${activeColor === c.color ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                                         {c.desc}
                                     </p>
                                 </div>
@@ -361,74 +362,87 @@ const BehindTheShot = () => {
                     </div>
                 </div>
 
-                {/* 9. Discarded Ideas - High Impact Cinematic Focal Point */}
-                <div className="reveal-section py-32 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-950/10 to-transparent pointer-events-none" />
+                {/* 9. Dual Section: Graveyard & Cosmic Wonder */}
+                <div className="reveal-section py-20 relative overflow-hidden">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                    <div className="flex items-center justify-between mb-16 relative z-10">
-                        <div className="flex items-center gap-4">
-                            <Trash2 size={24} className="text-red-500/50" />
-                            <h3 className="text-xl font-bold uppercase tracking-[0.3em] text-gray-500">The Graveyard</h3>
-                        </div>
-                        <div className="h-px flex-1 mx-8 bg-gradient-to-r from-red-500/20 to-transparent" />
-                    </div>
-
-                    <div className="relative group p-12 md:p-24 bg-[#050505] rounded-3xl border border-white/5 overflow-hidden shadow-2xl">
-                        {/* Interactive Glitch Background */}
-                        <div className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity duration-700">
-                            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
-                            <div className="absolute inset-x-0 top-0 h-1 bg-red-500/50 animate-pulse" style={{ top: '20%' }} />
-                            <div className="absolute inset-x-0 bottom-0 h-1 bg-red-500/50 animate-pulse" style={{ bottom: '40%' }} />
-                        </div>
-
-                        <div className="relative z-10 text-center space-y-12">
-                            <div className="inline-block px-4 py-1 rounded-full border border-red-500/30 text-red-500 text-[0.6rem] uppercase tracking-[0.4em] font-black mb-4">
-                                Critical Reflection
+                        {/* Left Column: The Graveyard */}
+                        <div className="relative group p-12 bg-[#050505] rounded-3xl border border-white/5 overflow-hidden shadow-2xl h-full flex flex-col justify-between">
+                            {/* Background Effects */}
+                            <div className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none">
+                                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
+                                <div className="absolute inset-x-0 top-0 h-1 bg-red-500/50 animate-pulse" style={{ top: '20%' }} />
                             </div>
 
-                            <h4 className="text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none">
-                                <span className="block text-white">CHASING</span>
-                                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 italic" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.1)' }}>
-                                    PERFECTION
-                                </span>
-                                <span className="block text-white opacity-80 decoration-red-500/50 line-through">IS KILLING</span>
-                                <span className="block text-white">YOUR PROGRESS.</span>
-                            </h4>
+                            <div className="relative z-10 mb-12">
+                                <div className="flex items-center gap-4 mb-8">
+                                    <Trash2 size={24} className="text-red-500/50" />
+                                    <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-gray-500">The Graveyard</h3>
+                                </div>
 
-                            <div className="max-w-2xl mx-auto space-y-8">
-                                <p className="text-xl md:text-2xl text-gray-400 font-serif italic leading-relaxed">
-                                    The graveyard of 'almost finished' is where most great ideas go to die. Perfection is a shield, but momentum is a weapon.
+                                <h4 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-6">
+                                    <span className="block text-white">CHASING</span>
+                                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 italic">
+                                        PERFECTION
+                                    </span>
+                                    <span className="block text-white opacity-60 decoration-red-500/50 line-through text-2xl md:text-3xl mt-2">
+                                        IS KILLING PROGRESS
+                                    </span>
+                                </h4>
+
+                                <p className="text-gray-400 font-serif italic leading-relaxed text-lg">
+                                    The graveyard of 'almost finished' is where most great ideas go to die.
                                 </p>
+                            </div>
 
-                                <div className="flex flex-col md:flex-row items-center justify-center gap-8 pt-8">
-                                    <div className="flex items-center gap-3 group/item">
-                                        <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20 group-hover/item:border-red-500/50 transition-colors">
-                                            <Edit3 size={16} className="text-red-400" />
-                                        </div>
-                                        <div className="text-left">
-                                            <div className="text-[0.6rem] uppercase tracking-widest text-gray-500">Lesson Learned</div>
-                                            <div className="text-sm font-mono text-gray-300">Done {">"} Perfect</div>
-                                        </div>
+                            <div className="relative z-10 pt-8 border-t border-white/10">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20">
+                                        <Edit3 size={16} className="text-red-400" />
                                     </div>
-                                    <div className="w-px h-8 bg-white/10 hidden md:block" />
-                                    <div className="flex items-center gap-3 group/item">
-                                        <div className="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center border border-orange-500/20 group-hover/item:border-orange-500/50 transition-colors">
-                                            <Activity size={16} className="text-orange-400" />
-                                        </div>
-                                        <div className="text-left">
-                                            <div className="text-[0.6rem] uppercase tracking-widest text-gray-500">Status</div>
-                                            <div className="text-sm font-mono text-gray-300">Moving Forward</div>
-                                        </div>
+                                    <div>
+                                        <div className="text-[0.6rem] uppercase tracking-widest text-gray-500">Lesson Learned</div>
+                                        <div className="text-sm font-mono text-gray-300">Done {">"} Perfect</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Visual Glitch Lines */}
-                        <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity">
-                            <div className="absolute inset-0 translate-x-4 mix-blend-screen opacity-20 bg-red-500 blur-3xl rounded-full" />
-                            <div className="absolute inset-0 -translate-x-4 mix-blend-screen opacity-20 bg-orange-500 blur-3xl rounded-full" />
+                        {/* Right Column: Things That Amaze Me */}
+                        <div className="relative group p-12 bg-[#050505] rounded-3xl border border-white/5 overflow-hidden shadow-2xl h-full flex flex-col justify-between">
+                            {/* Background Effects */}
+                            <div className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none">
+                                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
+                                <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-transparent to-purple-900/20" />
+                            </div>
+
+                            <div className="relative z-10 mb-12">
+                                <div className="flex items-center gap-4 mb-8">
+                                    <BookOpen size={24} className="text-indigo-400/50" />
+                                    <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-gray-500">Things That Amaze Me</h3>
+                                </div>
+
+                                <h4 className="text-3xl md:text-4xl font-black tracking-tighter leading-none mb-6 text-white">
+                                    COSMIC <span className="text-indigo-400 italic font-serif">WONDER</span>
+                                </h4>
+
+                                <div className="space-y-6">
+                                    <p className="text-gray-300 leading-relaxed font-sans text-lg">
+                                        What amazes me most is the delicate balance between the measurable and the miraculous. I find myself constantly stuck between the cold, beautiful logic of science and the profound belief that such a vast, intricate cosmos must be a divine creation.
+                                    </p>
+                                    <p className="text-gray-400 leading-relaxed font-sans text-base">
+                                        It’s the silent whisper of the creator hidden within the mathematical laws of the stars.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="relative z-10 pt-8 border-t border-white/10">
+                                <blockquote className="text-lg font-serif italic text-indigo-200/80 leading-relaxed">
+                                    "The infinite struggle between the evidence of the eyes and the intuition of the soul."
+                                </blockquote>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 

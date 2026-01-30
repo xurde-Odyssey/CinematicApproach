@@ -13,12 +13,12 @@ const LoadingExperience = ({ onComplete }) => {
             onComplete: () => {
                 gsap.to(containerRef.current, {
                     opacity: 0,
-                    duration: 1.5,
+                    duration: 1.1, // Faster exit (was 1.5)
                     ease: 'power2.inOut',
                     onComplete: onComplete,
                 });
             },
-        });
+        }).timeScale(1.4); // 40% faster speed
 
         const ctx = gsap.context(() => {
             // 1. Initial State

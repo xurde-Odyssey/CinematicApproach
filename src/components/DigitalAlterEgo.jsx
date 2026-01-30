@@ -44,8 +44,14 @@ const DigitalAlterEgo = () => {
         }
     }, [messages, mode]);
 
+    useEffect(() => {
+        const handleOpenContact = () => setMode('contact');
+        window.addEventListener('openContact', handleOpenContact);
+        return () => window.removeEventListener('openContact', handleOpenContact);
+    }, []);
+
     return (
-        <section className="min-h-[80vh] flex flex-col items-center justify-center py-24 relative overflow-hidden bg-black/20">
+        <section id="contact" className="min-h-[80vh] flex flex-col items-center justify-center py-24 relative overflow-hidden bg-black/20">
             {/* Background Elements */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/5 to-transparent pointer-events-none" />
 
