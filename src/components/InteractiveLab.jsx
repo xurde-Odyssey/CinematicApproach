@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Disc3, Type, Split, Glasses, X, ChevronRight, ChevronLeft, BookOpen, Sparkles, Zap, Aperture } from 'lucide-react';
+import { Disc3, Type, Glasses, X, BookOpen, Sparkles, Aperture } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -224,7 +224,6 @@ const FavoritesView = () => {
 const InteractiveLab = () => {
     const [activeTool, setActiveTool] = useState(null);
     const [poem, setPoem] = useState(null);
-    const [story, setStory] = useState(null);
     const [loading, setLoading] = useState(false);
     const sectionRef = useRef(null);
 
@@ -289,32 +288,12 @@ const InteractiveLab = () => {
         }
     };
 
-    const fetchRandomStory = async () => {
-        setLoading(true);
-        try {
-            const response = await fetch('https://openlibrary.org/random.json');
-            const data = await response.json();
-            setStory({
-                title: data.title,
-                author: data.authors?.[0]?.name || 'Unknown Author',
-                description: data.description?.value || 'A fascinating story from the collection.',
-            });
-        } catch (error) {
-            setStory(null);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
         if (activeTool?.id === 'poem') fetchRandomPoem();
-        else if (activeTool?.id === 'mood') fetchRandomStory();
     }, [activeTool]);
 
     const tools = [
-        { id: "wheel", title: "Decision Wheel", icon: <Zap />, description: "Neutralize overthinking. Let logic or chance decide the next path.", color: "#3B82F6" },
         { id: "poem", title: "Digital Echoes", icon: <Type />, description: "Curated literary sparks. Random poems and profound quotes.", color: "#10B981" },
-        { id: "mood", title: "Atmosphere", icon: <Sparkles />, description: "Generates a micro-narrative synchronized with current visuals.", color: "#A855F7" },
         { id: "visual", title: "The Archives", icon: <Glasses />, description: "A curation of books, artists, and adventures that shape the creator.", color: "#F59E0B" }
     ];
 
@@ -341,7 +320,7 @@ const InteractiveLab = () => {
                 </p>
             </div>
 
-            <div className="lab-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-7xl z-10 px-2 md:px-4">
+            <div className="lab-grid grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full max-w-7xl z-10 px-2 md:px-4">
                 {tools.map((tool, idx) => (
                     <div key={tool.id} className="lab-grid-item">
                         <LabCard
@@ -361,29 +340,13 @@ const InteractiveLab = () => {
                     {(activeTool.id === 'poem' && poem) && (
                         <Book {...poem} content={poem.lines.join('\n')} type="poem" onClose={() => setActiveTool(null)} onNext={fetchRandomPoem} />
                     )}
-                    {(activeTool.id === 'mood' && story) && (
-                        <Book {...story} content={story.description} type="story" onClose={() => setActiveTool(null)} onNext={fetchRandomStory} />
-                    )}
-                    {['wheel', 'visual'].includes(activeTool.id) && (
+                    {activeTool.id === 'visual' && (
                         <div className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center bg-[#070707] border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
                             <button onClick={() => setActiveTool(null)} className="absolute top-4 right-4 md:top-8 md:right-8 z-[3000] text-white/30 hover:text-white transition-colors p-2 bg-black/20 rounded-full md:bg-transparent">
                                 <X size={24} md:size={32} />
                             </button>
 
-                            {activeTool.id === 'visual' ? <FavoritesView /> : (
-                                <div className="text-center space-y-6 md:space-y-12 p-4">
-                                    <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto">
-                                        <div className="absolute inset-0 bg-blue-500/20 blur-3xl animate-pulse" />
-                                        <div className="relative z-10 h-full w-full rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center">
-                                            {React.cloneElement(activeTool.icon, { size: 36, className: "text-blue-500 md:text-[48px]" })}
-                                        </div>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter">Under Calibration</h2>
-                                        <p className="font-mono text-[8px] md:text-[10px] text-blue-500/50 uppercase tracking-[0.5em]">[ Code_Status: Refactoring_In_Progress ]</p>
-                                    </div>
-                                </div>
-                            )}
+                            <FavoritesView />
                         </div>
                     )}
                 </div>

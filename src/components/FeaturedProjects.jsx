@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink, ArrowUpRight, Play, Github } from 'lucide-react';
 
 import dipakImg from '../assets/images/dipaksup.png';
-import portfolioImg from '../assets/images/bts-final.png';
+import portfolioImg from '../assets/images/Nishan.png';
 import YatharoopImg from '../assets/images/yatharoop.png';
 import xurdeImg from '../assets/images/youtube.png';
 import bloodNationImg from '../assets/images/bloodnation.png';
@@ -44,9 +44,9 @@ const projects = [
         year: "2024",
         image: portfolioImg,
         description: "An advanced digital asset featuring custom CSS frameworks, interactive decision systems, and a performance-tuned light/dark theme system.",
-        tech: ["HTML", "CSS", "JavaScript", "GSAP", "React", "WebGL"],
-        link: "https://www.bhandaridipesh.com.np/",
-        github: "https://github.com/cyberholic-dips/dipesh-bhandari-portfolio.git"
+        tech: ["TailwindCSS", "JavaScript", "GSAP", "React", "WebGL"],
+        link: "https://www.nishanp.com.np",
+        github: "https://github.com/cyberholic-dips/NishanPortfolio.git"
     },
     {
         id: 4,
@@ -94,11 +94,11 @@ const ProjectCard = ({ project, index }) => {
                     </span>
                     <div className="flex gap-3">
                         {project.github && (
-                            <a href={project.github} className="p-2 bg-white/10 hover:bg-white text-white hover:text-black rounded-full transition-all">
+                            <a href={project.github} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 hover:bg-white text-white hover:text-black rounded-full transition-all">
                                 <Github size={18} />
                             </a>
                         )}
-                        <a href={project.link} className="p-2 bg-[#00F2FF] text-black rounded-full hover:scale-110 transition-transform">
+                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="p-2 bg-[#00F2FF] text-black rounded-full hover:scale-110 transition-transform">
                             <ArrowUpRight size={18} />
                         </a>
                     </div>
@@ -190,7 +190,7 @@ const FeaturedProjects = () => {
                 </div>
 
                 <div className="mt-32 text-center">
-                    <a href="#" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors font-mono uppercase tracking-widest text-sm group">
+                    <a href="#" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors font-mono uppercase tracking-widest text-sm group">
                         <span>View Full Archive</span>
                         <ArrowUpRight size={16} className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
                     </a>

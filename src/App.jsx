@@ -13,6 +13,7 @@ import DigitalAlterEgo from './components/DigitalAlterEgo';
 import BucketList from './components/BucketList';
 import EasterEgg from './components/EasterEgg';
 import EndCredits from './components/EndCredits';
+import HireMePage from './components/HireMePage';
 import './index.css';
 
 const MainLayout = ({ children }) => {
@@ -42,6 +43,20 @@ const MainLayout = ({ children }) => {
 
 const AppContent = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [path, setPath] = useState('/');
+
+  useEffect(() => {
+    const getPath = () => {
+      const normalized = window.location.pathname.replace(/\/+$/, '');
+      return normalized || '/';
+    };
+
+    setPath(getPath());
+    const handleLocationChange = () => setPath(getPath());
+    window.addEventListener('popstate', handleLocationChange);
+
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
 
   // Add error boundary
   useEffect(() => {
@@ -60,18 +75,24 @@ const AppContent = () => {
 
   return (
     <MainLayout>
-      <HeroSection />
-      <AboutSection />
-      <Timeline />
-      <InteractiveLab />
-      <Adventures />
-      <FeaturedProjects />
-      <BehindTheShot />
-      <DigitalAlterEgo />
-      <BucketList />
-      <EasterEgg />
-      <EndCredits />
-      <MoodSelector />
+      {path === '/hire-me' ? (
+        <HireMePage />
+      ) : (
+        <>
+          <HeroSection />
+          <AboutSection />
+          <Timeline />
+          <InteractiveLab />
+          <Adventures />
+          <FeaturedProjects />
+          <BehindTheShot />
+          <DigitalAlterEgo />
+          <BucketList />
+          <EasterEgg />
+          <EndCredits />
+          <MoodSelector />
+        </>
+      )}
     </MainLayout>
   );
 };

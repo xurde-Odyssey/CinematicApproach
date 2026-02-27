@@ -197,21 +197,14 @@ const HeroSection = () => {
 
                     {/* Actions & Links */}
                     <div className="hero-text-line flex flex-wrap gap-6 items-center">
-                        <button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                const contactSection = document.getElementById('contact');
-                                if (contactSection) {
-                                    contactSection.scrollIntoView({ behavior: 'smooth' });
-                                    window.dispatchEvent(new CustomEvent('openContact'));
-                                }
-                            }}
+                        <a
+                            href="/hire-me"
                             className="group relative px-8 py-4 bg-[var(--text-primary)] text-[var(--bg-color)] font-bold rounded-full overflow-hidden hover:scale-105 transition-transform duration-300">
                             <span className="relative z-10 flex items-center gap-2">
-                                Start Project <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                Hire Me <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </span>
                             <div className="absolute inset-0 bg-[var(--text-secondary)] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-                        </button>
+                        </a>
 
                         <div className="flex gap-4">
                             {socialLinks.map((link, i) => (

@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
 import { MapPin, Mountain, Compass } from 'lucide-react';
-import adventureHighlight from '../assets/adventure_highlight.png';
 
 const AdventureCard = ({ title, location, description, icon: Icon, delay, image, link }) => (
     <div

@@ -6,7 +6,7 @@ const visions = [
     { id: 2, title: 'Start YouTube Channel', status: 'completed', description: 'Launching "Xurde Odyssey" to document and share every step of my creative journey with the world. This platform will serve as a visual diary, inspiring others to chase their own artistic dreams.' },
     { id: 3, title: 'Solo Trip', status: 'pending', description: 'Venturing into the unknown completely alone to test my resilience and discover my true self. It\'s a quest for silence and clarity, away from the noise of everyday life.' },
     { id: 4, title: 'Master Videography', status: 'pending', description: 'Dedicating myself to the art of visual storytelling, mastering light, composition, and movement. My goal is to capture the world\'s beauty in cinematic quality that evokes deep emotion.' },
-    { id: 5, title: 'Run a Marathon', status: 'pending', description: 'Pushing my physical and mental limits to the absolute edge by training for and completing a marathon. It is not just about the distance, but the discipline and grit required to cross the finish line.' },
+    { id: 5, title: 'Run a Marathon', status: 'completed', description: 'Completed on February 21, 2026 at the Dharan 10K Run (14th Newa Charity Run) with a finish time of 1 hour 18 minutes.' },
     { id: 6, title: 'Read 100 Books', status: 'pending', description: 'Expanding my intellectual horizons by diving into a hundred different worlds and perspectives. Each book offers a new piece of wisdom, slowly building a library of knowledge within my mind.' },
     { id: 7, title: 'Complete 10 trek', status: 'pending', description: 'As i love to travel and hike in Nepal, i want to complete 10 trek in Nepal. I have already completed 5 trek so far.' },
 ];
