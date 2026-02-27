@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Layers, Sliders, Activity, Palette, Camera, Edit3, Trash2, HelpCircle, Play, Pause, VolumeX, Volume2, SkipForward, SkipBack, BookOpen, Heart, Tv, Video } from 'lucide-react';
 
 import btsFinal from '../assets/images/panorama.jpg';
-import btsWireframe from '../assets/images/bts-wireframe.png';
 import artVideo from '../assets/Video/Art.MOV';
 
 gsap.registerPlugin(ScrollTrigger);

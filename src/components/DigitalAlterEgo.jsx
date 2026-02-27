@@ -10,11 +10,30 @@ const DigitalAlterEgo = () => {
     const chatEndRef = useRef(null);
 
     const responses = {
+        greeting: "Hi! How are you?",
+        fine: "That's great to hear 😊",
+        howAreYou: "I'm doing well! Thanks for asking.",
+        name: "I am your digital assistant.",
+        creator: "I was created by my owner.",
+        capabilities: "I can chat with you and answer simple questions.",
+        goodMorning: "Good morning! Have a nice day.",
+        goodNight: "Good night! Sweet dreams.",
+        thankYou: "You're welcome!",
+        goodbye: "Goodbye! See you later.",
+        doing: "I'm here waiting to chat with you.",
+        help: "Sure! Tell me how I can help you.",
         inspiration: "I find inspiration in the silence between pixels and the rhythm of logic. Every line of code is a heartbeat of a new world.",
         purpose: "I create to bridge the gap between the seen and the felt. To turn abstract ideas into tangible emotions.",
         future: "I am building bridges to worlds where technology is invisible, yet its impact is profound and human-centered.",
         default: "That is a beautiful thought. In this universe, every detail matters. Tell me more about what you see."
     };
+
+    const normalizeInput = (text) =>
+        text
+            .toLowerCase()
+            .replace(/[^\w\s]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
 
     const handleSend = (e) => {
         e.preventDefault();
@@ -28,10 +47,22 @@ const DigitalAlterEgo = () => {
         // Simulate "thinking" and poetic response
         setTimeout(() => {
             let egoText = responses.default;
-            const lowerInput = input.toLowerCase();
-            if (lowerInput.includes('inspire')) egoText = responses.inspiration;
-            else if (lowerInput.includes('why') || lowerInput.includes('create')) egoText = responses.purpose;
-            else if (lowerInput.includes('next') || lowerInput.includes('build')) egoText = responses.future;
+            const normalizedInput = normalizeInput(input);
+            if (normalizedInput === 'hello' || normalizedInput === 'hi') egoText = responses.greeting;
+            else if (normalizedInput === 'i am fine') egoText = responses.fine;
+            else if (normalizedInput === 'how are you') egoText = responses.howAreYou;
+            else if (normalizedInput === 'what is your name') egoText = responses.name;
+            else if (normalizedInput === 'who created you') egoText = responses.creator;
+            else if (normalizedInput === 'what can you do') egoText = responses.capabilities;
+            else if (normalizedInput === 'good morning') egoText = responses.goodMorning;
+            else if (normalizedInput === 'good night') egoText = responses.goodNight;
+            else if (normalizedInput === 'thank you') egoText = responses.thankYou;
+            else if (normalizedInput === 'bye' || normalizedInput === 'goodbye') egoText = responses.goodbye;
+            else if (normalizedInput === 'what are you doing') egoText = responses.doing;
+            else if (normalizedInput === 'help') egoText = responses.help;
+            else if (normalizedInput.includes('inspire')) egoText = responses.inspiration;
+            else if (normalizedInput.includes('why') || normalizedInput.includes('create')) egoText = responses.purpose;
+            else if (normalizedInput.includes('next') || normalizedInput.includes('build')) egoText = responses.future;
 
             setMessages(prev => [...prev, { role: 'ego', text: egoText }]);
             setIsTyping(false);
