@@ -83,7 +83,14 @@ const HireMePage = () => {
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.035]" />
 
                 <div className="relative z-10 max-w-6xl mx-auto px-6 py-12 md:py-18 h-full flex flex-col justify-end gap-6">
-                    <a href="/" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/15 text-xs font-mono uppercase tracking-[0.2em] text-white/85 hover:bg-white/15 transition-colors w-fit">
+                    <a
+                        href="/"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            window.history.pushState({}, '', '/');
+                            window.dispatchEvent(new PopStateEvent('popstate'));
+                        }}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/15 text-xs font-mono uppercase tracking-[0.2em] text-white/85 hover:bg-white/15 transition-colors w-fit">
                         <ArrowRight className="rotate-180" size={14} /> Back to Portfolio
                     </a>
                     <div className="grid md:grid-cols-[1.15fr_0.85fr] gap-4 md:gap-6 max-w-6xl items-start">

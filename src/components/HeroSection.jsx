@@ -199,6 +199,11 @@ const HeroSection = () => {
                     <div className="hero-text-line flex flex-wrap gap-6 items-center">
                         <a
                             href="/hire-me"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                window.history.pushState({}, '', '/hire-me');
+                                window.dispatchEvent(new PopStateEvent('popstate'));
+                            }}
                             className="group relative px-8 py-4 bg-[var(--text-primary)] text-[var(--bg-color)] font-bold rounded-full overflow-hidden hover:scale-105 transition-transform duration-300">
                             <span className="relative z-10 flex items-center gap-2">
                                 Hire Me <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
