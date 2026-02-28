@@ -7,7 +7,7 @@ const DigitalAlterEgo = () => {
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [mode, setMode] = useState('chat'); // 'chat' or 'contact'
-    const chatEndRef = useRef(null);
+    const chatContainerRef = useRef(null);
 
     const responses = {
         greeting: "Hi! How are you?",
@@ -71,7 +71,10 @@ const DigitalAlterEgo = () => {
 
     useEffect(() => {
         if (messages.length > 1 && mode === 'chat') {
-            chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+            chatContainerRef.current?.scrollTo({
+                top: chatContainerRef.current.scrollHeight,
+                behavior: 'smooth'
+            });
         }
     }, [messages, mode]);
 
@@ -121,7 +124,10 @@ const DigitalAlterEgo = () => {
                 {mode === 'chat' ? (
                     <>
                         {/* Chat Window */}
-                        <div className="flex-1 p-6 md:p-8 overflow-y-auto space-y-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                        <div
+                            ref={chatContainerRef}
+                            className="flex-1 p-6 md:p-8 overflow-y-auto space-y-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
+                        >
                             {messages.map((msg, i) => (
                                 <div
                                     key={i}
@@ -150,7 +156,6 @@ const DigitalAlterEgo = () => {
                                     </div>
                                 </div>
                             )}
-                            <div ref={chatEndRef} />
                         </div>
 
                         {/* Input Bar */}

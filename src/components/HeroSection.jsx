@@ -30,6 +30,27 @@ const HeroSection = () => {
     const [loadingVlog, setLoadingVlog] = useState(true);
 
     const CHANNEL_ID = 'UC_4Rec2XAGsGRGdNtzY0eew';
+    const FEED_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
+
+    const parseYoutubeFeedXml = (xmlText) => {
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(xmlText, 'application/xml');
+        const firstEntry = xml.querySelector('entry');
+
+        if (!firstEntry) return null;
+
+        const title = firstEntry.querySelector('title')?.textContent?.trim();
+        const link = firstEntry.querySelector('link')?.getAttribute('href');
+        const videoId = firstEntry.querySelector('videoId, yt\\:videoId')?.textContent?.trim();
+
+        if (!title || !link) return null;
+
+        return {
+            title,
+            link,
+            thumbnail: videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null
+        };
+    };
 
     useEffect(() => {
         // 1. Calculate Days on Earth
@@ -45,10 +66,68 @@ const HeroSection = () => {
         // 2. Fetch Latest Vlog
         const fetchLatestVlog = async () => {
             try {
-                const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`);
-                const data = await response.json();
-                if (data.status === 'ok' && data.items.length > 0) {
-                    setLatestVlog(data.items[0]);
+                let vlog = null;
+
+                // Preferred path: same-origin API route (avoids browser CORS issues).
+                try {
+                    const apiResponse = await fetch(`/api/latest-vlog?channelId=${encodeURIComponent(CHANNEL_ID)}`);
+                    const apiContentType = apiResponse.headers.get('content-type') || '';
+                    if (apiResponse.ok && apiContentType.includes('application/json')) {
+                        const apiData = await apiResponse.json();
+                        if (apiData?.title && apiData?.link) {
+                            vlog = {
+                                title: apiData.title,
+                                link: apiData.link,
+                                thumbnail: apiData.thumbnail || null
+                            };
+                        }
+                    }
+                } catch {
+                    // Intentionally silent; we fallback below.
+                }
+
+                // Try direct YouTube feed first (works where CORS permits).
+                if (!vlog) {
+                    try {
+                    const directResponse = await fetch(FEED_URL);
+                    if (directResponse.ok) {
+                        const xmlText = await directResponse.text();
+                        vlog = parseYoutubeFeedXml(xmlText);
+                    }
+                    } catch {
+                    // Intentionally silent; we fallback below.
+                    }
+                }
+
+                // Fallback: proxy feed through allorigins and parse XML manually.
+                if (!vlog) {
+                    try {
+                        const proxiedResponse = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(FEED_URL)}`);
+                        if (proxiedResponse.ok) {
+                            const xmlText = await proxiedResponse.text();
+                            vlog = parseYoutubeFeedXml(xmlText);
+                        }
+                    } catch {
+                        // Intentionally silent; we fallback below.
+                    }
+                }
+
+                // Final fallback: rss2json.
+                if (!vlog) {
+                    const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(FEED_URL)}`);
+                    const data = await response.json();
+                    if (data?.status === 'ok' && Array.isArray(data.items) && data.items.length > 0) {
+                        const item = data.items[0];
+                        vlog = {
+                            title: item.title,
+                            link: item.link,
+                            thumbnail: item.thumbnail || null
+                        };
+                    }
+                }
+
+                if (vlog) {
+                    setLatestVlog(vlog);
                 }
             } catch (error) {
                 console.error('Error fetching vlog:', error);
@@ -163,13 +242,13 @@ const HeroSection = () => {
                 <div ref={textRef} className="lg:col-span-7 flex flex-col justify-center space-y-10 order-2 lg:order-1">
 
                     {/* Meta Header */}
-                    <div className="hero-meta flex flex-wrap items-center gap-6 text-xs font-mono text-[var(--text-secondary)] uppercase tracking-widest">
-                        <span className="flex items-center gap-2">
-                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    <div className="hero-meta flex flex-wrap items-center gap-5 text-xs font-mono text-[var(--text-secondary)] uppercase tracking-widest">
+                        <span className="flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-300/20 bg-gradient-to-r from-emerald-400/10 via-emerald-300/5 to-transparent text-emerald-100/90 shadow-[0_0_25px_rgba(16,185,129,0.14)]">
+                            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
                             System Online
                         </span>
-                        <span className="opacity-30">//</span>
-                        <div className="flex items-center gap-2" title="Days since June 26, 1999">
+                        <span className="text-[var(--text-primary)]/25">//</span>
+                        <div className="flex items-center gap-2 text-[var(--text-secondary)]/90" title="Days since June 26, 1999">
                             <Clock size={12} className="text-[var(--accent-color)]" />
                             <span><span className="text-[var(--text-primary)] font-bold">{daysOnEarth.toLocaleString()}</span> Days on Earth</span>
                         </div>
@@ -199,6 +278,11 @@ const HeroSection = () => {
                     <div className="hero-text-line flex flex-wrap gap-6 items-center">
                         <a
                             href="/hire-me"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                window.history.pushState({}, '', '/hire-me');
+                                window.dispatchEvent(new PopStateEvent('popstate'));
+                            }}
                             className="group relative px-8 py-4 bg-[var(--text-primary)] text-[var(--bg-color)] font-bold rounded-full overflow-hidden hover:scale-105 transition-transform duration-300">
                             <span className="relative z-10 flex items-center gap-2">
                                 Hire Me <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -232,7 +316,11 @@ const HeroSection = () => {
                         {latestVlog ? (
                             <a href={latestVlog.link} target="_blank" rel="noopener noreferrer" className="group flex gap-4 items-center bg-[var(--text-primary)]/5 p-4 rounded-xl hover:bg-[var(--text-primary)]/10 transition-all border border-transparent hover:border-[var(--text-primary)]/20">
                                 <div className="relative w-24 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-black">
-                                    <img src={latestVlog.thumbnail} alt={latestVlog.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                                    {latestVlog.thumbnail ? (
+                                        <img src={latestVlog.thumbnail} alt={latestVlog.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                                    ) : (
+                                        <div className="w-full h-full bg-black/70" />
+                                    )}
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
                                             <Play size={12} fill="white" className="text-white ml-0.5" />
@@ -251,7 +339,9 @@ const HeroSection = () => {
                         ) : (
                             <div className="p-4 rounded-xl bg-[var(--text-primary)]/5 border border-[var(--text-primary)]/10 border-dashed text-center">
                                 <p className="text-xs text-[var(--text-secondary)] font-mono">
-                                    {CHANNEL_ID === 'UC_YOUR_CHANNEL_ID_HERE'
+                                    {loadingVlog
+                                        ? "SCANNING TRANSMISSION..."
+                                        : CHANNEL_ID === 'UC_YOUR_CHANNEL_ID_HERE'
                                         ? "SIGNAL LOST: SYSTEM ID MISSING"
                                         : "NO TRANSMISSION DATA AVAILABLE"}
                                 </p>
