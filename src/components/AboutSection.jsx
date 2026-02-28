@@ -134,9 +134,11 @@ const AboutSection = () => {
                 </div>
 
                 {/* Footer Note */}
-                <div className="text-center pt-12 opacity-50 about-header">
-                    <p className="text-sm font-mono uppercase tracking-widest text-gray-500">
-                        Based in Nepal // Available Worldwide
+                <div className="text-center pt-12 about-header">
+                    <p className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] text-sm font-mono uppercase tracking-widest">
+                        <span className="text-white/70">Based in Nepal</span>
+                        <span className="text-white/25">//</span>
+                        <span className="text-amber-200/80">Available Worldwide</span>
                     </p>
                 </div>
             </div>
